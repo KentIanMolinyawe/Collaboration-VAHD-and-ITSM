@@ -1,263 +1,240 @@
 <?php
 include "db_conn.php";
-?>
 
-<!DOCTYPE html>
-<html lang="en">
+if(isset($_GET["id"])) {
+    $id = mysqli_real_escape_string($conn, $_GET["id"]);
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    $sql = "SELECT * FROM `support` WHERE id = $id";
 
-    <!-- Add your CSS styling here or link to an external CSS file -->
+    $result = mysqli_query($conn, $sql);
 
-    <title>IT Support Management</title>
-</head>
-
-<body>
-    <div class="navbar">
-        <h1>IT Support Management</h1>
-        <span>Agent: K.I. Molinyawe</span>
-    </div>
-    <!-- <div class="content">
-        <div class="control-panel">
-            <a href="#">Dashboard</a>
-            <a href="#">Open</a>
-            <a href="#">Solved</a>
-            <a href="#">Closed</a>
-            <a href="#">Pending</a>
-            <a href="#">Unassigned</a>
-            <a href="#">My Tickets</a>
-            <a href="#">My Teams</a>
-            <a href="#">Users</a>
-            <a href="logout.php">Logout</a>
-        </div> -->
-
-
-    <div class="container">
-        <?php
-        if (isset($_GET["msg"])) {
-            $msg = $_GET["msg"];
-            echo '<div class="alert alert-warning" role="alert">
-                ' . $msg . '
-                </div>';
-        }
+    if(mysqli_num_rows($result) > 0) {
+        $ticket = mysqli_fetch_assoc($result); // Display ticket details here
         ?>
-        <a href="ticketing.php" class="btn btn-dark mb-3">Add New</a>
+        <!DOCTYPE html>
+        <html lang="en">
 
-        <!-- <table class="table table-hover text-center"> -->
-        <table class="custom-table text-center">
-            <thead style="background-color: #343a40; color: #fff;">
-                <tr>
-                    <!-- <th scope="col">Ticket Number</th>
-                        <th scope="col">Full Name</th>
-                        <th scope="col">Student Number</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Issue Discription</th>
-                        <th scope="col">Type of Request</th> -->
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>View Ticket</title>
+        </head>
+        
+        <body>
+            <div class="container-wrapper">
+                <div class="container">
+                    <h1>Ticket Details</h1>
+                    <p><strong>Ticket Number:</strong> <?php echo $ticket["id"]; ?></p>
+                    <p><strong>Full Name:</strong> <?php echo $ticket["s_name"]; ?></p>
+                    <p><strong>Student Number:</strong> <?php echo $ticket["s_number"]; ?></p>
+                    <p><strong>Email:</strong> <?php echo $ticket["s_email"]; ?></p>
+                    <p><strong>Issue Description:</strong> <?php echo $ticket["s_discription"]; ?></p>
+                    <p><strong>Ticket Age:</strong> <?php echo calculateTimeElapsed($ticket["d_created"]); ?></p>
+                    <p><strong>Type of Request:</strong> <?php echo $ticket["t_request"]; ?></p>
 
-                    <th class="grid-item">Ticket Number</th>
-                    <th class="grid-item">Full Name</th>
-                    <th class="grid-item">Student Number</th>
-                    <th class="grid-item">Email</th>
-                    <th class="grid-item">Issue Discription</th>
-                    <th class="grid-item">Type of Request</th>
-                    <!-- <th class="grid-item">Team</th>
-                        <th class="grid-item">Assigned Agent</th>
-                        <th class="grid-item">Level Priority</th>
-                        <th class="grid-item">Status</th> -->
-                    <th class="grid-item">Action</th>
-
-                </tr>
-            </thead>
-            <!-- </table>
-            <table class="custom-table text-center"> -->
-            <tbody>
-                <?php
-                $sql = "SELECT * FROM `support`";
-                $result = mysqli_query($conn, $sql);
-                while ($row = mysqli_fetch_assoc($result)) {
-                ?>
-                    <tr>
-                        <td><?php echo $row["id"] ?></td>
-                        <td><?php echo $row["s_name"] ?></td>
-                        <td><?php echo $row["s_number"] ?></td>
-                        <td><?php echo $row["s_email"] ?></td>
-                        <td><?php echo $row["s_discription"] ?></td>
-                        <td><?php echo $row["t_request"] ?></td>
-                        <td>
-
-                            <div class="dropdown">
-                                <button class="dropbtn">Actions</button>
-                                <div class="dropdown-content">
-                                    <a href="view.php" class="link-dark">View</a>
-                                    <!-- <a href="#">View</a> -->
-                                    <a href="edit.php?id=<?php echo $row_id; ?>" class="link-dark">Delete</a>
-                                    <!-- <a href="#">Delete</a> -->
-                                    <a href="edit.php?id=<?php echo $row_id; ?>" class="link-dark">Edit</a>
-                        </td>
-                    </tr>
-                <?php
-                }
-                ?>
-            </tbody>
-        </table>
-
-    </div>
-
-</body>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-
-    .navbar {
-        background-color: #333;
-        color: #fff;
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 3px solid gainsboro;
-    }
-
-    .navbar h1 {
-        margin: 0;
-    }
-
-    .navbar span {
-        margin-right: 20px;
-    }
-
-    .content {
-        flex: 1;
-        display: flex;
-    }
-
-    .control-panel {
-        height: 80%;
-        width: 200px;
-        background-color: #333;
-        color: #fff;
-        overflow-y: auto;
-        padding-top: 2px;
-    }
-
-    .control-panel a {
-        text-decoration: none;
-        color: #fff;
-        display: block;
-        padding: 29.2px;
-        padding-left: 30px;
-        transition: background-color 0.3s;
-        border-bottom: 3px solid gainsboro;
-        border-radius: 10px;
-    }
-
-    .control-panel a:hover {
-        background-color: #555;
-    }
-
-    /* .grid-container {
-        display: table;
-        margin-top: 20px;
-    } */
-
-    /* .grid-item {
-        display: table-cell;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    } */
-
-    .custom-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    .custom-table th,
-    .custom-table td {
-        padding: 10px;
-        border: 1px solid #ddd;
-    }
-
-    .custom-table thead {
-        background-color: #343a40;
-        color: #fff;
-    }
-
-    .custom-table tbody tr:hover {
-        background-color: #f5f5f5;
-    }
+                    <form action="" method="post" onsubmit="return validateForm()">
+                    <div class="form-group">
+                    <label class="form-label"><strong>Ticket Status:</strong></label>
+                            <select name="t_status" id="t_status">
+                            <option value="Pending">Pending</option>
+                            <option value="Assigned">Assigned</option>
+                            <option value="Escalated">Escalated</option>
+                            <option value="Resolved">Resolved</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
 
 
-    /* 
-    .alert {
-        margin-top: 20px;
-        margin-bottom: 0;
-    }
+                    <br />
+                    <!-- Add Send and Delete buttons -->
+                    <!-- <button onclick="sendEmail('<?php echo $ticket["s_email"]; ?>')">Send</button>  -->
+                    <a href="#" class="link-dark" onclick="showConfirmation()">Delete</a>
+                    <a href="itsupport.php" class="btn btn-danger">Back</a>
+                    <button type="Save" class="btn btn-success" name="Save">Save</button>
 
-    .btn-dark {
-        background-color: #343a40;
-        color: #fff;
-    }
+                <script>
+                    function validateForm() {
+                        var t_status = document.getElementById("t_status").value;
 
-    .table {
-        margin-top: 20px;
-    }
+                        return true;
+                    }
+                </script>
+            </div>
+        </body>
+                <!-- Confirmation message -->
+                <div class="confirmation" id="confirmationMessage">
+                    <div class="confirmation-overlay"></div>
+                    <div class="confirmation-box">
+                        <div class="confirmation-message">
+                            Are you sure you want to delete?
+                            <br><br>
+                            <div class="confirmation-buttons">
+                                <button onclick="cancelDelete()" class="confirmation-button">No</button>
+                                <a href="ticket_action.php?id=<?php echo $ticket["id"]; ?>" class="confirmation-button confirmation-button-yes">Yes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function showConfirmation() {
+                    // Show the confirmation message
+                        document.getElementById('confirmationMessage').style.display = 'block';
+                    }
+                    function cancelDelete() {
+                    // Hide the confirmation message if "No" is clicked
+                        document.getElementById('confirmationMessage').style.display = 'none';
+                    }
+                </script>
+            </div>
+    </html>
+    <!-- CSS styles -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ebd28f;
+        }
 
-    .link-dark {
-        color: #000 !important;
-    } */
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
+        .container-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    /* Style for the dropdown button */
-    .dropbtn {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px;
+        .container {
+            width: 900px; /* Fixed width */
+            max-width: 900px; /* Adjust as needed */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background: linear-gradient(to bottom, #ddd, #999); /* Gradient background */
+            margin: 20px auto; /* Center the container horizontally */
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #343a40; /* Dark background color */
+            color: #fff; /* White text color */
+            text-decoration: none; /* No underlining */
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .btn:hover {
+            background-color: #555; /* Darker background color on hover */
+            cursor: pointer; /* Change cursor to pointer on hover */
+        }
+        .delete-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #dc3545; /* Bootstrap danger color */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333; /* Darker red on hover */
+            cursor: pointer;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+        .link-dark {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .link-dark:hover {
+            background-color: #c82333;
+        }
+        .confirmation {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .confirmation-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .confirmation-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .confirmation-buttons {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .confirmation-buttons {
+            text-align: center;   
+        }
+
+        .confirmation-buttons button {
+            margin-right: 10px;
+        }
+        .confirmation-button {
+        padding: 10px 20px;
         border: none;
+        border-radius: 5px;
+        background-color: #ccc;
+        color: #333;
         cursor: pointer;
+        transition: background-color 0.3s;
+        }
+
+        .confirmation-button:hover {
+            background-color: #999;
+        }
+
+        .confirmation-button-yes {
+            background-color: #d9534f;
+            color: #fff;
+        }
+
+        .confirmation-button-yes:hover {
+            background-color: #c9302c;
+        }
+
+    </style>
+
+<?php
+    } else {
+        // If ticket does not exist, display an error message
+        echo "Ticket not found.";
     }
-
-    /* Style for the dropdown content */
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-        z-index: 1;
+    } else {
+        // If ticket id is not provided, display an error message
+        echo "No ticket id provided.";
     }
-
-    /* Style for the dropdown links */
-    .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-    }
-
-    /* Change color on hover */
-    .dropdown-content a:hover {
-        background-color: #f1f1f1;
-    }
-
-    /* Show the dropdown content when the dropdown button is hovered over */
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-</style>
-
-
-</html>
+?>

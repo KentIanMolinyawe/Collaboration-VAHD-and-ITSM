@@ -37,13 +37,7 @@ include "db_conn.php";
                 <input type="text" class="form-control" name="s_name" id="s_name" placeholder="Full Name" required>
                 <!-- Added "required" attribute to make this field mandatory -->
             </div>
-
-            <div>
-                <label class="form-label">Student Number:</label>
-                <input type="text" class="form-control" name="s_number" id="s_number" placeholder="Student Number" required>
-                <!-- Added "required" attribute to make this field mandatory -->
-            </div>
-        </div>
+            
         <div class="mb-3">
             <label class="form-label">Email:</label>
             <input type="email" class="form-control" name="s_email" id="s_email" placeholder="name@example.com" required>
@@ -67,8 +61,8 @@ include "db_conn.php";
         </div>
 
         <div>
-            <button type="submit" class="btn btn-success" name="submit">Submit</button>
-            <a href="main.php" class="btn btn-danger">Cancel</a>
+            <button type="Submit" class="btn btn-success" name="Submit">Submit</button>
+            <a href="itsupport.php" class="btn btn-danger">Cancel</a>
         </div>
     </form>
 

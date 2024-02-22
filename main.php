@@ -26,7 +26,7 @@
         <nav>
             <img src="img/student.png" alt="Avatar" class="avatar">
             <ul>
-                <li><button><a href="itsupport.php">Class Schedules</a></button></li>
+                <li><button><a href="">Class Schedules</a></button></li>
                 <li><button><a href="">Activities</a></button></li>
                 <li><button><a href="">Program Curiculum</a></button></li>
                 <li><button><a href="">Balances</a></button></li>

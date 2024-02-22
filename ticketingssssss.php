@@ -7,10 +7,11 @@ if (isset($_POST['submit'])) {
     $s_email = $_POST['s_email'];
     // $s_subject = $_POST['s_subject'];
     $s_discription = $_POST['s_discription'];
+    $d_created = $_POST['d_created'];
     $t_request = $_POST['s_request'];
 
-    $sql = "INSERT INTO `support`(`id`, `s_name`, `s_number`,`s_email`, `s_discription`, `t_request`) 
-            VALUES (NULL,'$s_name','$s_number','$s_email','$s_discription','$t_request')";
+    $sql = "INSERT INTO `support`(`id`, `s_name`, `s_number`,`s_email`, `s_discription`, `d_created`,`t_request`) 
+            VALUES (NULL,'$s_name','$s_number','$s_email','$s_discription','$d_created','$t_request')";
 
     $result = mysqli_query($conn, $sql);
 

@@ -43,10 +43,9 @@ include "db_conn.php";
             ?>
             <br />
             <!-- Button to create a new ticket -->
-            <a href="ticketing2.php" class="btn btn-dark mb-3">Create New Ticket</a>
-            <a href="logs.php" class="btn btn-dark mb-3">Logs</a>
-            <a href="download_excel.php?download_excel=true" class="btn btn-dark mb-3">Download Table</a>
-        
+            <a href="ticketing.php" class="btn btn-dark mb-3">Create New Ticket</a>
+            <a href="itsupport.php" class="btn btn-dark mb-3">back</a>
+
             <!-- Table to display tickets -->
             <table class="custom-table text-center">
                 <thead style="background-color: #343a40; color: #fff;">
@@ -81,45 +80,17 @@ include "db_conn.php";
                             <td><?php echo $row["s_discription"] ?></td>
                             <td><?php echo calculateTimeElapsed($row["d_created"]); ?></td>   <!-- Call the PHP function to calculate time elapsed -->
                             <td><?php echo $row["t_request"] ?></td>
-                            <td><?php echo $row["t_status"] ?></td>  <!-- needs more modifiers -->
-                            <td> 
+                            <td><?php echo "Pending" ?></td>  <!-- needs more modifiers -->
+                            <td>
                                 <!-- Dropdown menu for actions -->
                                 <div class="dropdown">
                                     <button class="dropbtn">Actions</button>
-                                        <div class="dropdown-content">
-                                            <!-- Links for each action -->
-                                            <a href="view.php?id=<?php echo $row["id"]; ?>" class="link-dark">View</a>
-                                            <a href="#" class="link-dark" onclick="showConfirmation()">Delete</a>
-                                            <a href="edit.php?id=<?php echo $row_id; ?>" class="link-dark">Edit</a>
-                                        </div>
-
-                                        <!-- Confirmation message -->
-                                        <div class="confirmation" id="confirmationMessage">
-                                            <div class="confirmation-overlay"></div>
-                                            <div class="confirmation-box">
-                                                <div class="confirmation-message">
-                                                    Are you sure you want to delete?
-                                                    <br><br>
-                                                    <div class="confirmation-buttons">
-                                                    <button onclick="cancelDelete()" class="confirmation-button">No</button>
-                                                    <a href="ticket_action.php?id=<?php echo $row["id"]; ?>" class="confirmation-button confirmation-button-yes">Yes</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <script>
-                                            function showConfirmation() {
-                                                // Show the confirmation message
-                                                document.getElementById('confirmationMessage').style.display = 'block';
-                                            }
-                                            function cancelDelete() {
-                                                // Hide the confirmation message if "No" is clicked
-                                                document.getElementById('confirmationMessage').style.display = 'none';
-                                            }
-
-                                        </script>
+                                    <div class="dropdown-content">
+                                        <!-- Links for each action -->
+                                        <a href="view.php?id=<?php echo $row["id"]; ?>" class="link-dark">View</a>
+                                        <a href="deleteTicket_action.php?id=<?php echo $row["id"]; ?>" class="link-dark">Delete</a>
+                                        <a href="edit.php?id=<?php echo $row_id; ?>" class="link-dark">Edit</a>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -299,69 +270,6 @@ include "db_conn.php";
     .btn-dark:hover {
         background-color: #555; /* Darker background color on hover */
         cursor: pointer; /* Change cursor to pointer on hover */
-    }
-
-    .confirmation {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    }
-
-    .confirmation-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    .confirmation-box {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 5px;
-    }
-
-    .confirmation-buttons {
-        text-align: center;
-        font-weight: bold;
-    }
-
-    .confirmation-buttons {
-        text-align: center;   
-    }
-
-    .confirmation-buttons button {
-        margin-right: 10px;
-    }
-    .confirmation-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ccc;
-    color: #333;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    }
-
-    .confirmation-button:hover {
-        background-color: #999;
-    }
-
-    .confirmation-button-yes {
-        background-color: #d9534f;
-        color: #fff;
-    }
-
-    .confirmation-button-yes:hover {
-        background-color: #c9302c;
     }
 </style>
 
